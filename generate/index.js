@@ -1,16 +1,49 @@
-module.exports = async function (context, req) {
-    context.log('JavaScript HTTP trigger function processed a request.');
+'use strict';
 
-    if (req.query.name || (req.body && req.body.name)) {
-        context.res = {
-            // status: 200, /* Defaults to 200 */
-            body: "Hello " + (req.query.name || req.body.name)
-        };
-    }
-    else {
-        context.res = {
-            status: 400,
-            body: "Please pass a name on the query string or in the request body"
-        };
-    }
+/**
+ * Generate a diceware passphrase.
+ * 
+ * /api/generate?length={number}&seq={string}
+ */
+module.exports = async function (context, req) {
+    context.res = {
+        // status: 200, /* Defaults to 200 */
+        body: generatePassphrase(req.query.length, req.query.sep)
+    };
 };
+
+/**
+ * Return a passphrase constructed from words in wordlist.json.
+ * @param {number} length - The number of words in the passphrase.
+ * @param {string} sep - The string to separate each word.
+ */
+function generatePassphrase(length=6, sep="-") {
+    const wordlist = require('./wordlist.json');
+    let passphrase = "";
+    for(var i=0; i<length; i++) {
+        if(i>0) {
+            passphrase+=sep;
+        }
+        passphrase+=wordlist[roll5DiceString()];
+    }
+    return passphrase;
+}
+
+/**
+ * Return a string ranging from "11111" to "66666".
+ */
+function roll5DiceString() {
+    return ""+
+        rollDice()+
+        rollDice()+
+        rollDice()+
+        rollDice()+
+        rollDice();
+}
+
+/**
+ * Return an integer ranging from 1 to 6.
+ */
+function rollDice() {
+    return Math.floor(Math.random() * 6) + 1;
+}
