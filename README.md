@@ -5,9 +5,8 @@ passwords based on the EFF wordlist.
 
 # Live Demo
 
-    https://dicewareapi.azurewebsites.net/api/generate
-
-    https://dicewareapi.azurewebsites.net/api/generate?length=6&sep=-
+- https://dicewareapi.azurewebsites.net/api/generate
+- https://dicewareapi.azurewebsites.net/api/generate?length=8&sep=%5E
 
 # Development
 
